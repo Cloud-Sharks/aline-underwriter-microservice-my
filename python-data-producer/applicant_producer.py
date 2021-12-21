@@ -15,24 +15,24 @@ def populate_applicant(auth):
             "applicationType" : application_type,
             "noApplicants" : False,
             "applicants" : [{
-                "address" : fake.street_address(), # varchar(255)
-                "city" : fake.city(), # varchar(255)
+                "address" : fake.street_address(),
+                "city" : fake.city(),
                 "dateOfBirth" : fake.numerify('19##-0%-1#'),
-                "driversLicense" : fake.numerify('#########'), # varchar(255) unique
-                "email" : fake.email(), # varchar(255) unique
-                "firstName" : fake.first_name(), # varchar(255)
-                "gender" : fake.random_element(elements=('MALE','FEMALE', 'OTHER', 'UNSPECIFIED')), # varchar(255)
-                "income" : fake.numerify('#%#######'), # int
-                "lastName" : fake.last_name(), # varchar(255)
-                "mailingAddress" : fake.street_address(), # varchar(255)
-                "mailingCity" : fake.city(), # varchar(255)
-                "mailingState" : fake.state(), # varchar(255)
-                "mailingZipcode" : fake.zipcode(), # varchar(255)
-                "middleName" : fake.first_name(), # varchar(255) nullable
-                "phone" : fake.numerify('(###)-###-####'), # varchar(255) unique
-                "socialSecurity" : fake.numerify('###-##-') + (str(i+1)*4), # varchar(255) unique
-                "state" : fake.state(), # varchar(255)
-                "zipcode" : fake.zipcode(), # varchar(255)
+                "driversLicense" : fake.numerify('#########'),
+                "email" : fake.email(),
+                "firstName" : fake.first_name(),
+                "gender" : fake.random_element(elements=('MALE','FEMALE', 'OTHER', 'UNSPECIFIED')),
+                "income" : fake.numerify('#%#######'),
+                "lastName" : fake.last_name(),
+                "mailingAddress" : fake.street_address(),
+                "mailingCity" : fake.city(),
+                "mailingState" : fake.state(),
+                "mailingZipcode" : fake.zipcode(),
+                "middleName" : fake.first_name(),
+                "phone" : fake.numerify('(###)-###-####'),
+                "socialSecurity" : fake.numerify('###-##-') + (str(i+1)*4),
+                "state" : fake.state(),
+                "zipcode" : fake.zipcode()
             }]
         }
         reg_app = requests.post(applications_url, json=applicant_info, headers=auth)
