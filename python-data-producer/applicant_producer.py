@@ -1,15 +1,17 @@
 import requests
+import logging
+import os
 from faker import Faker
-from datetime import datetime
 
-def populate_applicant(auth):
+def populate_applicant(auth, applicant_entries):
+    logging.basicConfig(level=logging.INFO, filename="aline_files/core-my/docker-data/aline_log.log", filemode='a', format='%(process)d - [%(levelname)s ] - %(message)s')
     fake = Faker()
     mem_id_array = []
     acc_num_array = []
-    applications_url = 'http://localhost:8071/applications'
+    # applications_url = 'http://localhost:8071/applications'
+    applications_url = f"{os.environ.get('APP_URL')}/applications"
     
-    user_entries = 9
-    for i in range(user_entries):
+    for i in range(applicant_entries):
         application_type = fake.random_element(elements=('CHECKING', 'SAVINGS', 'CREDIT_CARD'))
         applicant_info = {
             "applicationType" : application_type,
@@ -30,22 +32,20 @@ def populate_applicant(auth):
                 "mailingZipcode" : fake.zipcode(),
                 "middleName" : fake.first_name(),
                 "phone" : fake.numerify('(###)-###-####'),
-                "socialSecurity" : fake.numerify('###-##-') + (str(i+1)*4),
+                "socialSecurity" : fake.numerify('###-##-') + (str((i%10)+1)*4),
                 "state" : fake.state(),
                 "zipcode" : fake.zipcode()
             }]
         }
-        reg_app = requests.post(applications_url, json=applicant_info, headers=auth)
-        mem_id_array.append(reg_app.json()['createdMembers'][0]['membershipId'])
-        if application_type != 'CREDIT_CARD':
-            acc_num_array.append(reg_app.json()['createdAccounts'][0]['accountNumber'])
+        logging.info(f'Trying to post {applicant_info}')
+        try:
+            reg_app = requests.post(applications_url, json=applicant_info, headers=auth)
+            mem_id_array.append(reg_app.json()['createdMembers'][0]['membershipId'])
+            if application_type != 'CREDIT_CARD':
+                acc_num_array.append(reg_app.json()['createdAccounts'][0]['accountNumber'])
+            logging.info('Applicant posted')
+        except Exception as e:
+            logging.error(f'Error entering applicant: ', exc_info=True)
     return [mem_id_array, acc_num_array]
 
-# login_info = {
-#     'username' : 'adminUser',
-#     'password' : 'Password*8'
-# }
-# login_response = requests.post('http://localhost:8070/login', json=login_info)
-# bearer_token = login_response.headers['Authorization']
-# auth = {'Authorization' : bearer_token}
-# populate_applicant(auth)
+print('', end='')
