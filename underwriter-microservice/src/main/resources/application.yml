@@ -1,5 +1,5 @@
 server:
-  port: 8071 # ${APP_PORT}
+  port: ${APP_PORT} # 8071
 
 spring:
   application:
