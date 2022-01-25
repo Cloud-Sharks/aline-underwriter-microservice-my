@@ -6,7 +6,7 @@ pipeline{
         //set env vars
         COMMIT_HASH = "latest"
         SERVICE_NAME = 'underwriter-ms'
-        REGION = 'us-west-1'
+        REGION = 'us-east-1'
         APP_NAME = 'my-underwriter-microservice'
         APP_ENV = 'dev'
         ORGANIZATION = 'Aline-Financial-MY'
